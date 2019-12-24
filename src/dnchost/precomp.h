@@ -1,20 +1,21 @@
 #pragma once
 // Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information.
 
-#include <windows.h>
-#include <MsiQuery.h>
 
-#include "dutil.h"
-#include "conutil.h"
-#include "logutil.h"
-#include "memutil.h"
-#include "pathutil.h"
+#include <windows.h>
+#include <msiquery.h>
+
+#include <dutil.h>
+#include <pathutil.h>
+#include <strutil.h>
+#include <xmlutil.h>
 
 #include "BootstrapperEngine.h"
 #include "BootstrapperApplication.h"
+#include "IBootstrapperEngine.h"
+#include "IBootstrapperApplication.h"
+#include "IBootstrapperApplicationFactory.h"
 
-#include "TestEngine.h"
+#include "balutil.h"
 
-HRESULT RunShutdownEngine(
-    __in LPCWSTR wzBAFilePath
-    );
+#include "mscoree.h"

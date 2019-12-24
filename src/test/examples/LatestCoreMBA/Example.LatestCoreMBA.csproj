@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RuntimeIdentifiers>win-x86;win-x64</RuntimeIdentifiers>
+    <Description>Latest .NET Core MBA</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.1.65" PrivateAssets="all" />
+    <PackageReference Include="WixToolset.Mba.Core" Version="4.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="BootstrapperApplicationData.xml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="WixToolset.Mba.Host.config" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

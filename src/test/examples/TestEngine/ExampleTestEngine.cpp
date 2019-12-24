@@ -18,5 +18,5 @@ int __cdecl wmain(int argc, LPWSTR argv[])
     }
 
     ConsoleUninitialize();
-    return HRESULT_CODE(hr);
+    return hr;
 }

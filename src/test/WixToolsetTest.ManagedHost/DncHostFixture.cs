@@ -5,33 +5,33 @@ namespace WixToolsetTest.ManagedHost
     using WixBuildTools.TestSupport;
     using Xunit;
 
-    public class MbaHostFixture
+    public class DncHostFixture
     {
         [Fact]
-        public void CanLoadFullFramework2MBA()
+        public void CanLoadEarliestCoreMBA()
         {
             var testEngine = new TestEngine();
-            var baFile = TestData.Get(@"..\examples\Example.FullFramework2MBA\mbahost.dll");
+            var baFile = TestData.Get(@"..\examples\publish\Example.EarliestCoreMBA\dnchost.dll");
 
             var result = testEngine.RunShutdownEngine(baFile);
             var logMessages = result.Output;
             Assert.Equal("Loading managed bootstrapper application.", logMessages[0]);
             Assert.Equal("Creating BA thread to run asynchronously.", logMessages[1]);
-            Assert.Equal("FullFramework2BA", logMessages[2]);
+            Assert.Equal("EarliestCoreBA", logMessages[2]);
             Assert.Equal("Shutdown,ReloadBootstrapper,0", logMessages[3]);
         }
 
         [Fact]
-        public void CanLoadFullFramework4MBA()
+        public void CanLoadLatestCoreMBA()
         {
             var testEngine = new TestEngine();
-            var baFile = TestData.Get(@"..\examples\Example.FullFramework4MBA\net48\mbahost.dll");
+            var baFile = TestData.Get(@"..\examples\publish\Example.LatestCoreMBA\dnchost.dll");
 
             var result = testEngine.RunShutdownEngine(baFile);
             var logMessages = result.Output;
             Assert.Equal("Loading managed bootstrapper application.", logMessages[0]);
             Assert.Equal("Creating BA thread to run asynchronously.", logMessages[1]);
-            Assert.Equal("FullFramework4BA", logMessages[2]);
+            Assert.Equal("LatestCoreBA", logMessages[2]);
             Assert.Equal("Shutdown,ReloadBootstrapper,0", logMessages[3]);
         }
     }

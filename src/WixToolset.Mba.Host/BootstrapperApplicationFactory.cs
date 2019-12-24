@@ -9,16 +9,24 @@ namespace WixToolset.Mba.Host
     using WixToolset.Mba.Core;
 
     /// <summary>
-    /// Entry point for the MBA host to create and return the BA to the engine.
+    /// Entry point for the managed host to create and return the BA to the engine.
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
     public sealed class BootstrapperApplicationFactory : MarshalByRefObject, IBootstrapperApplicationFactory
     {
+        private string baFactoryAssemblyName;
+
         /// <summary>
         /// Creates a new instance of the <see cref="BootstrapperApplicationFactory"/> class.
+        /// Entry point for the MBA host.
         /// </summary>
         public BootstrapperApplicationFactory()
         {
+        }
+
+        public BootstrapperApplicationFactory(string baFactoryAssemblyName)
+        {
+            this.baFactoryAssemblyName = baFactoryAssemblyName;
         }
 
         /// <summary>
@@ -30,15 +38,13 @@ namespace WixToolset.Mba.Host
         /// does not define the <see cref="BootstrapperApplicationFactoryAttribute"/>.</exception>
         public void Create(IntPtr pArgs, IntPtr pResults)
         {
-            // Get the wix.boostrapper section group to get the name of the bootstrapper application assembly to host.
-            var section = ConfigurationManager.GetSection("wix.bootstrapper/host") as HostSection;
-            if (null == section)
+            if (null == this.baFactoryAssemblyName)
             {
-                throw new MissingAttributeException(); // TODO: throw a more specific exception than this.
+                this.baFactoryAssemblyName = GetBAFactoryAssemblyNameFromConfigurationManager();
             }
 
             // Load the BA's IBootstrapperApplicationFactory.
-            var baFactoryType = BootstrapperApplicationFactory.GetBAFactoryTypeFromAssembly(section.AssemblyName);
+            var baFactoryType = BootstrapperApplicationFactory.GetBAFactoryTypeFromAssembly(this.baFactoryAssemblyName);
             var baFactory = (IBootstrapperApplicationFactory)Activator.CreateInstance(baFactoryType);
             if (null == baFactory)
             {
@@ -46,6 +52,18 @@ namespace WixToolset.Mba.Host
             }
 
             baFactory.Create(pArgs, pResults);
+        }
+
+        private static string GetBAFactoryAssemblyNameFromConfigurationManager()
+        {
+            // Get the wix.boostrapper section group to get the name of the bootstrapper application assembly to host.
+            var section = ConfigurationManager.GetSection("wix.bootstrapper/host") as HostSection;
+            if (null == section)
+            {
+                throw new MissingAttributeException(); // TODO: throw a more specific exception than this.
+            }
+
+            return section.AssemblyName;
         }
 
         /// <summary>
@@ -80,6 +98,12 @@ namespace WixToolset.Mba.Host
             }
 
             return baFactoryType;
+        }
+
+        // Entry point for the DNC host.
+        public static IBootstrapperApplicationFactory CreateBAFactory([MarshalAs(UnmanagedType.LPWStr)] string baFactoryAssemblyName)
+        {
+            return new BootstrapperApplicationFactory(baFactoryAssemblyName);
         }
     }
 }

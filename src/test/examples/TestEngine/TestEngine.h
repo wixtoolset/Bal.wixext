@@ -18,6 +18,10 @@ public:
         __in BOOTSTRAPPER_SHUTDOWN_ACTION defaultAction
         );
 
+    HRESULT SendStartupEvent();
+
+    void UnloadBA();
+
 private:
     static HRESULT BAEngineLog(
         __in TestEngine* pContext,
@@ -38,5 +42,6 @@ public:
     ~TestEngine();
 
 private:
+    HMODULE m_hBAModule;
     BOOTSTRAPPER_CREATE_RESULTS* m_pCreateResults;
 };
